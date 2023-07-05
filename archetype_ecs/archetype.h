@@ -20,9 +20,8 @@ namespace Vivium {
 
 		struct archetype_t {
 		private:
-			// TODO: will not maintain entities, so index becomes corrupted
-			// TODO: either maintain a list of entities within the archetype,
-			// or just make this private
+			// Corrupts all entity identifiers, but is only called when registry is deleted
+			// so this doesn't matter
 			void m_clear();
 
 			friend registry_t;
@@ -39,7 +38,6 @@ namespace Vivium {
 
 			signature_t signature;
 			std::array<per_component_data_t, MAX_COMPONENTS> arrays;
-			// TODO: use size variable instead of getting array size
 			uint32_t size = 0;
 
 			archetype_t() = default;

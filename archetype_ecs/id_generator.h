@@ -1,6 +1,7 @@
 #pragma once
 
 #include "constants.h"
+#include "paged_array.h"
 
 #include <vector>
 #include <utility>
@@ -11,10 +12,9 @@ namespace Vivium {
 		template <typename T>
 		concept integer_type = std::is_integral_v<T>;
 
-		template <integer_type T, T max_ids, T null_value>
+		template <integer_type T, uint32_t max_ids, T null_value>
 		struct id_generator {
 			// Inside, an implicit list pointing to IDs to recycle
-			// TODO: consider turning into paged array, maybe optional using template arguments
 			std::vector<T> created;
 			uint32_t available;
 			T next = null_value; // Next value to recycle

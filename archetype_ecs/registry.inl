@@ -11,11 +11,12 @@ namespace Vivium {
 		archetype_t* registry_t::m_extend_archetype(const archetype_t& old_archetype) {
 			archetype_t new_archetype;
 
-			// TODO: should only iterate 1s in old signature
 			for (uint32_t i = 0; i < MAX_COMPONENTS; i++) {
-				new_archetype.arrays[i].components = component_array_t(
-					old_archetype.arrays[i].components.get_manager()
-				);
+				if (old_archetype.signature.enabled.test(i)) {
+					new_archetype.arrays[i].components = component_array_t(
+						old_archetype.arrays[i].components.get_manager()
+					);
+				}
 			}
 
 			signature_t new_signature = old_archetype.signature;
@@ -42,11 +43,12 @@ namespace Vivium {
 		{
 			archetype_t new_archetype;
 
-			// TODO: should only iterate 1s in old signature
 			for (uint32_t i = 0; i < MAX_COMPONENTS; i++) {
-				new_archetype.arrays[i].components = component_array_t(
-					old_archetype.arrays[i].components.get_manager()
-				);
+				if (old_archetype.signature.enabled.test(i)) {
+					new_archetype.arrays[i].components = component_array_t(
+						old_archetype.arrays[i].components.get_manager()
+					);
+				}
 			}
 
 			signature_t new_signature = old_archetype.signature;

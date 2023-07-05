@@ -14,8 +14,6 @@ namespace Vivium {
 	namespace ECS {
 		struct archetype_t;
 		
-		// TODO: missing lots of safety checks on if entity already has component
-
 		struct registry_t {
 		private:
 			static entity_value_t m_entity_id_getter(const entity_t& entity);
@@ -28,7 +26,7 @@ namespace Vivium {
 			id_generator<entity_value_t, MAX_ENTITIES, ENTITY_NULL_ID> m_entity_gen;
 
 			sparse_set_t<entity_t, entity_value_t, decltype(m_entity_id_getter),
-				m_entity_id_getter, MAX_ENTITIES, SPARSE_PAGE_SIZE, ENTITY_NULL> m_entity_sparse;
+				m_entity_id_getter, MAX_ENTITIES, ENTITY_SPARSE_PAGE_SIZE, ENTITY_NULL> m_entity_sparse;
 
 			registry_id_t m_id;
 

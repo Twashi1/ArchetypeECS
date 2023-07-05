@@ -27,6 +27,10 @@ namespace Vivium {
 
 			std::set<page> pages;
 
+			void clear() {
+				pages.clear();
+			}
+
 			// Shrink to necessary size
 			void shrink_to_size() {
 				for (auto it = pages.begin(); it != pages.end();) {

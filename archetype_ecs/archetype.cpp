@@ -10,9 +10,6 @@ namespace Vivium {
 			return signature != other.signature;
 		}
 
-		// TODO: will not maintain entities, so index becomes corrupted
-		// TODO: either maintain a list of entities within the archetype,
-		// or just make this private
 		void archetype_t::m_clear() {
 			for (uint32_t i = 0; i < MAX_COMPONENTS; i++) {
 				if (signature.enabled.test(i)) {

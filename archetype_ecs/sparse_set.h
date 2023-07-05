@@ -20,7 +20,6 @@ namespace Vivium {
 				const uint32_t index = m_sparse_array.at(key);
 
 				if (index == null_value) {
-					// TODO: print key value
 					VIVIUM_ECS_ERROR(severity::FATAL, "Key was invalid, got null value from sparse array");
 				}
 

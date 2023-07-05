@@ -27,7 +27,8 @@ namespace Vivium {
 		constexpr uint32_t MAX_ENTITY_VERSION	= ENTITY_NULL_VERSION;
 		constexpr uint32_t ENTITY_SHIFT_VERSION = 5 * 4;
 
-		constexpr uint32_t SPARSE_PAGE_SIZE = 1024;
+		constexpr uint32_t ENTITY_SPARSE_PAGE_SIZE = 1024;
+		constexpr uint32_t ID_GEN_SPARSE_PAGE_SIZE = 1024;
 
 		constexpr uint32_t INVALID_INDEX = 0xffffffff;
 	}

@@ -68,19 +68,17 @@ namespace Vivium {
 			++(add_archetype->size);
 		}
 
-		// TODO: special overload if shrinking archetype results in there being
-		// no archetype/shrinking when only one component
 		template<typename T>
 		void archetype_t::remove_component(entity_t& entity, registry_t& registry)
 		{
 			// Calculate/find new archetype for entity
 
-			// Check if its in our add component vector
 			component_id_t new_component_id = component_registry<T>::get_id(registry.m_id);
 
+			// Check if its in our remove component vector
 			archetype_t*& rem_archetype = arrays[new_component_id].connections.remove;
 
-			// We didn't already have it, so find it in registry
+			// We didn't have it cached, so find it in registry
 			if (rem_archetype == nullptr) {
 				// Calculate signature
 				signature_t new_signature = signature;
@@ -88,7 +86,7 @@ namespace Vivium {
 
 				archetype_t* new_archetype = registry.m_get_archetype(new_signature);
 
-				// Archetype was in registry at least
+				// Archetype was in registry
 				if (new_archetype != nullptr) {
 					// Update connection to point to this archetype
 					rem_archetype = new_archetype;
@@ -100,7 +98,8 @@ namespace Vivium {
 			}
 
 			// rem_archetype now stores the new archetype
-			// Copy old component data over, except bad component
+			
+			// Copy old component data over, except component to be removed
 			// First iterate enabled component arrays
 			uint32_t array_size = INVALID_INDEX;
 
@@ -114,12 +113,12 @@ namespace Vivium {
 							entity.index
 						);
 					}
-					// Check if its the bad component
+					// Check if its the component to be removed
 					else if (!rem_archetype->signature.enabled.test(i)) {
 						// It was one of the components that we're removing,
 						// since its in the old archetype but not the new one
 						// So just remove that component from the array,
-						// but not transferring it over
+						// but don't transfer it over
 						arrays[new_component_id].components.erase(
 							entity.index
 						);
