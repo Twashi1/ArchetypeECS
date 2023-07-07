@@ -22,9 +22,9 @@ namespace Vivium {
 		{
 			if (m_data != nullptr) {
 				m_manager.destroy_range(m_data, m_size);
-
 				delete[] m_data;
 				m_data = nullptr;
+				
 				m_size = 0;
 				m_capacity = 0;
 			}
@@ -44,14 +44,14 @@ namespace Vivium {
 			m_manager = manager;
 		}
 
-		component_array_t::component_array_t(component_array_t&& other)
+		component_array_t::component_array_t(component_array_t&& other) noexcept
 			: m_size(std::move(other.m_size)),
 			m_capacity(std::move(other.m_capacity)),
 			m_data(std::exchange(other.m_data, nullptr)),
 			m_manager(std::move(other.m_manager))
 		{}
 
-		component_array_t& component_array_t::operator=(component_array_t&& other) {
+		component_array_t& component_array_t::operator=(component_array_t&& other) noexcept {
 			m_size = std::move(other.m_size);
 			m_capacity = std::move(other.m_capacity);
 			m_data = std::exchange(other.m_data, nullptr);
@@ -157,6 +157,7 @@ namespace Vivium {
 			if (!within_bounds(index))
 				VIVIUM_ECS_ERROR(severity::ERROR, "Tried to erase index that wasn't within bounds {} >= {}", index, m_size);
 			else {
+				// Swap remove component data
 				m_manager.swap_remove(
 					m_manager.at(m_data, index),		// this element gets deleted
 					m_manager.at(m_data, m_size - 1)	// this element fills the slot
@@ -207,7 +208,7 @@ namespace Vivium {
 			at(nullptr),
 			size(nullptr) {}
 		
-		component_manager_t::component_manager_t(component_manager_t&& other)
+		component_manager_t::component_manager_t(component_manager_t&& other) noexcept
 			: move(std::move(other.move)),
 			move_range(std::move(other.move_range)),
 			clone(std::move(other.clone)),
@@ -220,7 +221,7 @@ namespace Vivium {
 			size(std::move(other.size))
 		{}
 
-		component_manager_t& component_manager_t::operator=(component_manager_t && other)
+		component_manager_t& component_manager_t::operator=(component_manager_t&& other) noexcept
 		{
 			move			= std::move(other.move);
 			move_range		= std::move(other.move_range);

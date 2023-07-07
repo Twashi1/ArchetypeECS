@@ -41,7 +41,7 @@ namespace Vivium {
 				uint32_t index = m_dense_array.size();
 				m_dense_array.push_back(element);
 
-				m_sparse_array.at(key_func(element), 1) = index;
+				m_sparse_array.push(key_func(element), index);
 			}
 
 			void remove(const value_t& element) {
@@ -66,8 +66,7 @@ namespace Vivium {
 				std::swap(last_element_sparse, current_element_sparse);
 
 				// Remove element at index
-				m_sparse_array.at(last_key, 0) = null_value;
-				m_sparse_array.at(last_key, -1);
+				m_sparse_array.pop(last_key);
 			}
 		};
 	}

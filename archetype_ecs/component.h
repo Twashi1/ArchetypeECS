@@ -136,8 +136,8 @@ namespace Vivium {
 			component_manager_t(const component_manager_t& other);
 			component_manager_t& operator=(const component_manager_t& other);
 
-			component_manager_t(component_manager_t&& other);
-			component_manager_t& operator=(component_manager_t&& other);
+			component_manager_t(component_manager_t&& other) noexcept;
+			component_manager_t& operator=(component_manager_t&& other) noexcept;
 
 			template<typename T, typename... Args>
 			void create(uint8_t* src, uint32_t index, Args&&... args) const {
@@ -172,6 +172,7 @@ namespace Vivium {
 			uint32_t m_size;
 			uint32_t m_capacity;
 
+			// Component data
 			uint8_t* m_data;
 
 			component_manager_t m_manager;
@@ -185,8 +186,8 @@ namespace Vivium {
 
 			component_array_t(component_manager_t manager);
 
-			component_array_t(component_array_t&& other);
-			component_array_t& operator=(component_array_t&& other);
+			component_array_t(component_array_t&& other) noexcept;
+			component_array_t& operator=(component_array_t&& other) noexcept;
 
 			component_array_t(const component_array_t&) = delete;
 			component_array_t& operator=(const component_array_t&) = delete;
@@ -220,6 +221,9 @@ namespace Vivium {
 			template <typename T>
 			void construct_at(const T& element, uint32_t index) {
 				m_manager.create<T>(m_data, index, element);
+				m_handles[index].m_internal = new handle_internal_t(
+					m_manager.at(m_data, index)
+				);
 			}
 
 			template <typename T>
@@ -228,6 +232,9 @@ namespace Vivium {
 				m_manager.destroy(m_manager.at(m_data, index));
 				// Construct at location
 				construct_at<T>(element, index);
+				
+				// TODO: should give indication in handle that component was deleted,
+				// then create new handle, thus we need refcounted handles/version numbered
 			}
 
 			template <typename T>
