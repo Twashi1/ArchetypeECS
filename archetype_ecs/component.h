@@ -221,9 +221,6 @@ namespace Vivium {
 			template <typename T>
 			void construct_at(const T& element, uint32_t index) {
 				m_manager.create<T>(m_data, index, element);
-				m_handles[index].m_internal = new handle_internal_t(
-					m_manager.at(m_data, index)
-				);
 			}
 
 			template <typename T>
@@ -232,9 +229,6 @@ namespace Vivium {
 				m_manager.destroy(m_manager.at(m_data, index));
 				// Construct at location
 				construct_at<T>(element, index);
-				
-				// TODO: should give indication in handle that component was deleted,
-				// then create new handle, thus we need refcounted handles/version numbered
 			}
 
 			template <typename T>
