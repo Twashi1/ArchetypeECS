@@ -23,6 +23,18 @@ namespace Vivium {
 					enabled.set(component, true);
 				} (), ... );
 			}
+
+			template <typename... Ts>
+			void extend(registry_id_t registry) {
+				([&]() {
+					component_id_t component = component_registry<Ts>::get_id(registry);
+
+					if (enabled.test(component))
+						VIVIUM_ECS_ERROR(severity::WARN, "Extending signature with existing component");
+
+					enabled.set(component, true);
+				} (), ...);
+			}
 		};
 	}
 }
