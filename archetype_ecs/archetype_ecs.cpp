@@ -34,17 +34,11 @@ void ecs_test() {
 
     entity_value_t x = registry.get_entity();
 
-    registry.push_component<int>(x, 5);
-    registry.push_component<float>(x, 7.0f);
-
-    registry.remove_component<float>(x);
+    registry.push_components<int, float>(x, 5, 7.0f);
 
     entity_value_t y = registry.get_entity();
 
-    registry.push_component<float>(y, 1.0f);
-    registry.push_component<int>(y, 3);
-
-    registry.remove_component<float>(y);
+    registry.push_components<float, int>(y, 1.0f, 3);
 
     entity_value_t z = registry.get_entity();
 
@@ -52,11 +46,11 @@ void ecs_test() {
 
     registry.free_entity(z);
 
-    auto begin = registry.begin<int>();
-    auto end = registry.end<int>();
+    auto begin = registry.begin<int, float>();
+    auto end = registry.end<int, float>();
 
     while (begin != end) {
-        std::cout << begin.get<int>() << std::endl;
+        std::cout << begin.get<int>() << ", " << begin.get<float>() << std::endl;
         
         ++begin;
     }

@@ -130,6 +130,23 @@ namespace Vivium {
 			}
 		}
 
+		template<typename ...Ts>
+		void registry_t::push_components(entity_value_t entity_id, const Ts&... components)
+		{
+			entity_t& entity = m_entity_sparse.at(entity_id);
+
+			// Get current archetype of this entity
+			archetype_t* current_archetype = entity.archetype;
+
+			if (current_archetype != nullptr) {
+				current_archetype->push_components<Ts...>(entity, *this, components...);
+			}
+			else {
+				current_archetype = m_get_or_create_archetype<Ts...>();
+				current_archetype->push_entity<Ts...>(entity, m_id, components...);
+			}
+		}
+
 		template<typename T>
 		void registry_t::remove_component(entity_value_t entity_id)
 		{

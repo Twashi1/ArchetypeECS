@@ -58,6 +58,8 @@ namespace Vivium {
 
 			template <typename T>
 			void push_component(entity_value_t entity_id, const T& component);
+			template <typename... Ts>
+			void push_components(entity_value_t entity_id, const Ts&... components);
 
 			template <typename T>
 			void remove_component(entity_value_t entity_id);

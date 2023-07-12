@@ -68,6 +68,46 @@ namespace Vivium {
 			++(add_archetype->size);
 		}
 
+		template<typename ...Ts>
+		void archetype_t::push_components(entity_t& entity, registry_t& registry, const Ts&... components)
+		{
+			signature_t new_signature = signature;
+			new_signature.extend<Ts...>(registry.m_id);
+
+			archetype_t* new_archetype = registry.m_get_archetype(new_signature);
+
+			if (new_archetype == nullptr) {
+				new_archetype = registry.m_extend_archetype<Ts...>(*this);
+			}
+
+			uint32_t array_size = 0;
+
+			// Move old components
+			for (uint32_t i = 0; i < MAX_COMPONENTS; i++) {
+				if (signature.enabled.test(i)) {
+					arrays[i].components.transfer_index_to_end_of(
+						entity.index,
+						new_archetype->arrays[i].components
+					);
+
+					array_size = new_archetype->arrays[i].components.size();
+				}
+			}
+
+			// Add new components
+			([&]() {
+				component_id_t component_id = component_registry<Ts>::get_id(registry.m_id);
+
+				new_archetype->arrays[component_id].components.push_back(components);
+			}(), ...);
+
+			entity.index = array_size - 1;
+			entity.archetype = new_archetype;
+
+			--size;
+			++(new_archetype->size);
+		}
+
 		template<typename T>
 		void archetype_t::remove_component(entity_t& entity, registry_t& registry)
 		{

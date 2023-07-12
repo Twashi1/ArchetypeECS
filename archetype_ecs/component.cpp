@@ -83,11 +83,7 @@ namespace Vivium {
 		void component_array_t::reserve(uint32_t new_capacity) {
 			// Ignore if new capacity was less than our current
 			if (new_capacity < m_capacity)
-				VIVIUM_ECS_ERROR(
-					severity::DEBUG,
-					"New capacity was less than current capacity {} < {}",
-					new_capacity, m_capacity
-				);
+				return;
 			else {
 				// Create bigger array
 				uint8_t* new_data = new uint8_t[
